@@ -50,13 +50,34 @@ ros-noetic-diagnostic-updater ros-noetic-diagnostic-msgs \
 libdw-dev \
 libelf-dev
 
-# Build the workspace
+
+# -------------------------
+# Build workspace
+# -------------------------
 WORKDIR /root/catkin_ws
 RUN /bin/bash -c "source /opt/ros/noetic/setup.bash && catkin_make"
 
-# Auto-source your workspace too
+# Auto-source your workspace
 RUN echo "source /root/catkin_ws/devel/setup.bash" >> /root/.bashrc
 
+# -------------------------
+# Add watchdog script for driver restart
+# -------------------------
+COPY run_driver.sh /root/run_driver.sh
+RUN chmod +x /root/run_driver.sh
+
+# -------------------------
+# Healthcheck: monitor ROS topic
+# -------------------------
+HEALTHCHECK --interval=30s --timeout=10s --start-period=20s --retries=3 CMD \
+    bash -c "source /opt/ros/noetic/setup.bash && \
+            source /root/catkin_ws/devel/setup.bash && \
+            rostopic list | grep -q /orbbec/camera/color/camera_info" || exit 1
+
+# -------------------------
+# Entrypoint
+# -------------------------
+ENTRYPOINT ["/root/run_driver.sh"]
 
 # Default entrypoint: start bash with ROS sourced
 # CMD ["bash", "-i"]
@@ -66,6 +87,6 @@ RUN echo "source /root/catkin_ws/devel/setup.bash" >> /root/.bashrc
 #                    source /root/catkin_ws/devel/setup.bash && \
 #                    roslaunch orbbec_camera femto_bolt.launch"]
 
-CMD ["bash", "-c", "source /opt/ros/noetic/setup.bash && \
-source /root/catkin_ws/devel/setup.bash && \
-roslaunch orbbec_camera femto_mega.launch"]
+# CMD ["bash", "-c", "source /opt/ros/noetic/setup.bash && \
+# source /root/catkin_ws/devel/setup.bash && \
+# roslaunch orbbec_camera femto_mega.launch"]
