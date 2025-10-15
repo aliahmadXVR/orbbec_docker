@@ -91,10 +91,10 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=20s --retries=3 CMD \
 # -------------------------
 # Entrypoint
 # -------------------------
-# ENTRYPOINT ["/root/run_driver.sh"]
+ENTRYPOINT ["/root/run_driver.sh"]
 
 # Default entrypoint: start bash with ROS sourced
-CMD ["bash", "-i"]
+# CMD ["bash", "-i"]
 
 # Start Femto Bolt driver automatically
 # CMD ["bash", "-c", "source /opt/ros/noetic/setup.bash && \
