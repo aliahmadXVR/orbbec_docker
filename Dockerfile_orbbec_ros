@@ -70,6 +70,10 @@ RUN /bin/bash -c "source /opt/ros/noetic/setup.bash && catkin_make"
 # Auto-source your workspace
 RUN echo "source /root/catkin_ws/devel/setup.bash" >> /root/.bashrc
 
+RUN echo "export ROS_MASTER_URI=http://192.168.8.1:11311" >> /root/.bashrc && \
+    echo "export ROS_HOSTNAME=192.168.8.2" >> /root/.bashrc && \
+    echo "export ROS_IP=192.168.8.2" >> /root/.bashrc
+
 # -------------------------
 # Add watchdog script for driver restart
 # -------------------------
