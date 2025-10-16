@@ -11,10 +11,10 @@ export ROS_HOSTNAME=192.168.8.2
 export ROS_IP=192.168.8.2
 
 # Start Orbbec camera driver in background
-roslaunch orbbec_camera femto_mega.launch camera_name:=orbbec/camera enable_colored_point_cloud:=true ordered_pc:=true &
-sleep 5  # optional delay
+roslaunch orbbec_camera femto_mega.launch camera_name:=orbbec/camera enable_colored_point_cloud:=true ordered_pc:=true 
+# sleep 5  # optional delay
 
-# Start rosbridge server
-roslaunch rosbridge_server rosbridge_websocket.launch
+# Start rosbridge server # optional
+# roslaunch rosbridge_server rosbridge_websocket.launch port:=9091
 
 
